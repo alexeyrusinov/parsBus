@@ -1,21 +1,24 @@
 import json, requests
 import datetime
 
+#получаю текущее вермя
+now = datetime.datetime.now()
+# получаю текущю дату
+now_day = str(now.day)
+# преобразую минуты и часы в строки и скоадываю
+my_time = str(now.hour) + str(now.minute)
+# на выходе инт без нулей
+times = int(my_time)
 
-url ="https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-6%27&station=ekb"
+
+
+ # подставляю текущий день
+url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
+
 
 response = requests.get(url)
 response.raise_for_status()
 dic = response.json()
-
-
-#получаю текущее вермя
-now = datetime.datetime.now()
-# преобразую минуты и часы в строки и скоадываю
-my_time = str(now.hour) + str(now.minute)
-times = int(my_time)
-# на выходе инт без нулей
-
 
 #write json file
 with open('data.json', 'w', encoding='utf8') as f:
