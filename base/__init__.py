@@ -12,7 +12,6 @@ my_time = str(now.hour) + str(now.minute)
 times = int(my_time)
 
 
-
  # past now day
 url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
 
@@ -21,43 +20,43 @@ response = requests.get(url)
 response.raise_for_status()
 dic = response.json()
 
-df = DataFrame(dic['rasp'], columns =
-            ["number_route",
-            "name_route",
-            "time_otpr",
-            "time_prib",
-            "free_place",
-            "count_all_bus"
-            "count_bus",
-            "cancel",
-            "price",
-            "baggage",
-            "name_bus",
-            "name_atp",
-            "rasp_id"])
-print(df)
 
 
-# #write json file
-# with open('data.json', 'w', encoding='utf8') as f:
-#     json.dump(dic, f, ensure_ascii=False, indent=4)
-#
-# #Read json file
-# with open('data.json') as f:
-#     data = json.load(f)
-#
-# # delete html code
-# for item in data["rasp"]:
-#     item["name_route"] = item["name_route"].replace('<br/>', '')
-#
-# # convert str ["time_otpr"] to int
-# for item in data["rasp"]:
-#     item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
-#
-# #write json file
-# with open('new_data.json', 'w', encoding='utf8') as f:
-#     json.dump(data, f, ensure_ascii=False, indent=4)
-#
+
+#write json file
+with open('data.json', 'w', encoding='utf8') as f:
+    json.dump(dic, f, ensure_ascii=False, indent=4)
+
+#Read json file
+with open('data.json') as f:
+    data = json.load(f)
+
+
+# delete html code
+for item in data["rasp"]:
+    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')
+
+
+# convert str ["time_otpr"] to int
+for item in data["rasp"]:
+    item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
+
+
+#write json file
+with open('new_data.json', 'w', encoding='utf8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
+
+
+df = DataFrame(data['rasp'], columns = ['time_otpr', 'cancel', 'free_place', 'name_bus', 'name_route'])
+# output result without index pandas
+print(df.to_string(index=False))
+
+
+
+
+
+
+
 # # print result
 # for i in data["rasp"]:
 #     if i["time_otpr"] < times:
