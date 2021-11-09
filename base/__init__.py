@@ -8,7 +8,7 @@ now = datetime.datetime.now()
 now_day = str(now.day)
 # convert int (minutes and hours) to string and sum
 my_time = str(now.hour) + str(now.minute)
-# на выходе инт
+# output int
 times = int(my_time)
 
 
