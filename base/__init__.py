@@ -49,3 +49,5 @@ for i in data["rasp"]:
     if i["cancel"] == "":
         i["cancel"] = "waiting"
     print(f"Time: {i['time_otpr']}, status: {i['cancel']}, free place: {i['free_place']}, name bus: {i['name_bus']}, {i['name_route']}")
+
+# test branch
