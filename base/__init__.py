@@ -32,7 +32,7 @@ with open('data.json') as f:
     data = json.load(f)
 
 
-# delete html code
+# delete html code and abbreviation of name
 for item in data["rasp"]:
     item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')
 
