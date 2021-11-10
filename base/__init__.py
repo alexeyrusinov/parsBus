@@ -12,10 +12,10 @@ my_time = str(now.hour) + str(now.minute)
 times = int(my_time)
 
 
- # past now day
+# past now day
 url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
 
-
+# get json
 response = requests.get(url)
 response.raise_for_status()
 dic = response.json()
@@ -34,7 +34,7 @@ items_to_keep = []
 for item in data["rasp"]:
     # convert str ["time_otpr"] to int
     item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
-    # добавляет только те автобусы у кого время отправления больше текущего времени
+    # add buses with the nearest time
     if item["time_otpr"] > times:
         items_to_keep.append(item)
     # delete html code and abbreviation of name
