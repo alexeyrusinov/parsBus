@@ -21,8 +21,6 @@ response.raise_for_status()
 dic = response.json()
 
 
-
-
 #write json file
 with open('data.json', 'w', encoding='utf8') as f:
     json.dump(dic, f, ensure_ascii=False, indent=4)
@@ -51,19 +49,3 @@ with open('new_data.json', 'w', encoding='utf8') as f:
 df = DataFrame(items_to_keep, columns = ['time_otpr', 'cancel', 'free_place', 'name_bus', 'name_route'])
 # output result without index pandas
 print(df.to_string(index=False))
-
-
-
-
-
-
-
-# # print result
-# for i in data["rasp"]:
-#     if i["time_otpr"] < times:
-#         continue
-#     if i["cancel"] == "Отмена":
-#         i["cancel"] = "canceled"
-#     if i["cancel"] == "":
-#         i["cancel"] = "waiting"
-#     print(f"Time: {i['time_otpr']}, status: {i['cancel']}, free place: {i['free_place']}, name bus: {i['name_bus']}, {i['name_route']}")
