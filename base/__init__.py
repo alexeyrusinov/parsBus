@@ -14,6 +14,7 @@ times = int(my_time)
 # past now day
 url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
 
+
 # get json
 response = requests.get(url)
 response.raise_for_status()
