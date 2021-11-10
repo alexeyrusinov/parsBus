@@ -1,5 +1,4 @@
-import json, requests
-import datetime
+import json, requests, datetime
 from pandas import DataFrame
 
 # get time
