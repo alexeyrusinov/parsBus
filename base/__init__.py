@@ -35,11 +35,15 @@ items_to_keep = []
 for item in data["rasp"]:
     # convert str ["time_otpr"] to int
     item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
+    # rename value
+    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')
+    item["cancel"] = item["cancel"].replace("Отмена", "canceled")
+    # rename key
+    item["status"] = item.pop("cancel")
     # add buses with the nearest time
     if item["time_otpr"] > times:
         items_to_keep.append(item)
-    # delete html code and abbreviation of name
-    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')
+
 
 
 #write json file
@@ -49,13 +53,12 @@ with open('new_data.json', 'w', encoding='utf8') as f:
 
 # print of min to next bus
 for i in items_to_keep:
-    if i["cancel"] == "":
+    if i["status"] == "":
         nex_bus = i["time_otpr"] - times
-
         print(f" The next bus in {nex_bus} minutes ")
         break
 
 
-df = DataFrame(items_to_keep, columns = ['time_otpr', 'cancel', 'free_place', 'name_bus', 'name_route'])
+df = DataFrame(items_to_keep, columns = ["time_otpr", "status", "free_place", "name_bus", "name_route"])
 # output result without index pandas
 print(df.to_string(index=False))
