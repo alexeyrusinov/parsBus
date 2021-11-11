@@ -46,6 +46,15 @@ with open('new_data.json', 'w', encoding='utf8') as f:
     json.dump(items_to_keep, f, ensure_ascii=False, indent=4)
 
 
+# output of min to next bus
+for i in items_to_keep:
+    if i["cancel"] == "":
+        nex_bus = i["time_otpr"] - times
+
+        print(f" The next bus in {nex_bus} minutes ")
+        break
+
+
 df = DataFrame(items_to_keep, columns = ['time_otpr', 'cancel', 'free_place', 'name_bus', 'name_route'])
 # output result without index pandas
 print(df.to_string(index=False))
