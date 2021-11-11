@@ -13,7 +13,6 @@ times = int(my_time)
 
 
 # past now day and month
-# url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
 url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
 
 
