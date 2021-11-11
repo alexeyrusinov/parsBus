@@ -16,10 +16,14 @@ times = int(my_time)
 url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
 
 
-# get json
-response = requests.get(url)
-response.raise_for_status()
-dic = response.json()
+# catch errors
+try:
+    # get json
+    response = requests.get(url)
+    response.raise_for_status()
+    dic = response.json()
+except Exception:
+    print(">>>>--------> Errors with getting json <--------<<<<")
 
 
 #write json file
