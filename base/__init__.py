@@ -14,8 +14,7 @@ url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-" + now
 
 # catch errors
 try:
-    # get json
-    response = requests.get(url)
+    response = requests.get(url)  # get json
     response.raise_for_status()
     dic = response.json()
 except Exception:
@@ -34,7 +33,7 @@ with open('data.json') as f:
 items_to_keep = []
 for item in data["rasp"]:
     item["time_otpr"] = datetime.datetime.strptime(item["time_otpr"], "%H:%M").time() # convert str to class 'datetime
-    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')   # rename value
+    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ) -')   # rename value
     item["cancel"] = item["cancel"].replace("Отмена", "canceled")  # rename value
     item["status"] = item.pop("cancel") # rename key
     if item["time_otpr"] > times:
@@ -49,7 +48,8 @@ with open('new_data.json', 'w', encoding='utf8') as f:
 for i in items_to_keep: # print min to the next bus
     if i["status"] == "":
         nex_bus = i["time_otpr"].minute - times.minute
-        print(f" The next bus in {nex_bus} minutes ")
+        free_place = i["free_place"]
+        print(f" The next bus in {nex_bus} minutes, free places: {free_place} ")
         break
 
 
