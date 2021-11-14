@@ -60,6 +60,3 @@ for i in items_to_keep: # convert class 'datetime.time to string deleting second
 df = DataFrame(items_to_keep, columns = ["time_otpr", "status", "free_place", "name_bus", "name_route"])
 # output result without index pandas
 print(df.to_string(index=False))
-
-
-
