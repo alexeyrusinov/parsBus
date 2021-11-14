@@ -1,25 +1,24 @@
-import json, requests, datetime
-from pandas import DataFrame
+import json, requests
+import datetime
 
-
-now = datetime.datetime.now() # get date and time
+# get time
+now = datetime.datetime.now()
+# get date
 now_day = str(now.day)
-now_month = str(now.month)
-times = now.time().replace(microsecond=0) # del millisecond
+# convert int (minutes and hours) to string and sum
+my_time = str(now.hour) + str(now.minute)
+# на выходе инт
+times = int(my_time)
 
 
-# past now day and month
-url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
+
+ # past now day
+url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-11-" + now_day  + "%27&station=ekb"
 
 
-# catch errors
-try:
-    response = requests.get(url)  # get json
-    response.raise_for_status()
-    dic = response.json()
-except Exception:
-    print(">>>>--------> Errors with getting json <--------<<<<")
-
+response = requests.get(url)
+response.raise_for_status()
+dic = response.json()
 
 #write json file
 with open('data.json', 'w', encoding='utf8') as f:
@@ -29,34 +28,24 @@ with open('data.json', 'w', encoding='utf8') as f:
 with open('data.json') as f:
     data = json.load(f)
 
-
-items_to_keep = []
+# delete html code
 for item in data["rasp"]:
-    item["time_otpr"] = datetime.datetime.strptime(item["time_otpr"], "%H:%M").time() # convert str to class 'datetime
-    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ) -')   # rename value
-    item["cancel"] = item["cancel"].replace("Отмена", "canceled")  # rename value
-    item["status"] = item.pop("cancel") # rename key
-    if item["time_otpr"] > times:
-        items_to_keep.append(item)
+    item["name_route"] = item["name_route"].replace('<br/>', '')
 
+# convert str ["time_otpr"] to int
+for item in data["rasp"]:
+    item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
 
 #write json file
 with open('new_data.json', 'w', encoding='utf8') as f:
-    json.dump(items_to_keep, f, ensure_ascii=False, indent=4, sort_keys=True, default=str)
+    json.dump(data, f, ensure_ascii=False, indent=4)
 
-
-for i in items_to_keep: # print min to the next bus
-    if i["status"] == "":
-        nex_bus = i["time_otpr"].minute - times.minute
-        free_place = i["free_place"]
-        print(f" The next bus in {nex_bus} minutes, free places: {free_place} ")
-        break
-
-
-for i in items_to_keep: # convert class 'datetime.time to string deleting seconds
-    i["time_otpr"] = i["time_otpr"].strftime("%H:%M")
-
-
-df = DataFrame(items_to_keep, columns = ["time_otpr", "status", "free_place", "name_bus", "name_route"])
-# output result without index pandas
-print(df.to_string(index=False))
+# print result
+for i in data["rasp"]:
+    if i["time_otpr"] < times:
+        continue
+    if i["cancel"] == "Отмена":
+        i["cancel"] = "canceled"
+    if i["cancel"] == "":
+        i["cancel"] = "waiting"
+    print(f"Time: {i['time_otpr']}, status: {i['cancel']}, free place: {i['free_place']}, name bus: {i['name_bus']}, {i['name_route']}")
