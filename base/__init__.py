@@ -1,15 +1,11 @@
 import json, requests, datetime
 from pandas import DataFrame
 
-# get time
-now = datetime.datetime.now()
-# get date
+
+now = datetime.datetime.now() # get date and time
 now_day = str(now.day)
 now_month = str(now.month)
-# convert int (minutes and hours) to string and sum
-my_time = str(now.hour) + str(now.minute)
-# get time int
-times = int(my_time)
+times = now.time().replace(microsecond=0) # del millisecond
 
 
 # past now day and month
@@ -37,32 +33,33 @@ with open('data.json') as f:
 
 items_to_keep = []
 for item in data["rasp"]:
-    # convert str ["time_otpr"] to int
-    item["time_otpr"] = int("".join(filter(str.isdigit, item["time_otpr"])))
-    # rename value
-    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')
-    item["cancel"] = item["cancel"].replace("Отмена", "canceled")
-    # rename key
-    item["status"] = item.pop("cancel")
-    # add buses with the nearest time
+    item["time_otpr"] = datetime.datetime.strptime(item["time_otpr"], "%H:%M").time() # convert str to class 'datetime
+    item["name_route"] = item["name_route"].replace('г.Екатеринбург (Южный АВ) -<br/>', 'Екб (Южный АВ)')   # rename value
+    item["cancel"] = item["cancel"].replace("Отмена", "canceled")  # rename value
+    item["status"] = item.pop("cancel") # rename key
     if item["time_otpr"] > times:
         items_to_keep.append(item)
 
 
-
 #write json file
 with open('new_data.json', 'w', encoding='utf8') as f:
-    json.dump(items_to_keep, f, ensure_ascii=False, indent=4)
+    json.dump(items_to_keep, f, ensure_ascii=False, indent=4, sort_keys=True, default=str)
 
 
-# print of min to next bus
-for i in items_to_keep:
+for i in items_to_keep: # print min to the next bus
     if i["status"] == "":
-        nex_bus = i["time_otpr"] - times
+        nex_bus = i["time_otpr"].minute - times.minute
         print(f" The next bus in {nex_bus} minutes ")
         break
+
+
+for i in items_to_keep: # convert class 'datetime.time to string deleting seconds
+    i["time_otpr"] = i["time_otpr"].strftime("%H:%M")
 
 
 df = DataFrame(items_to_keep, columns = ["time_otpr", "status", "free_place", "name_bus", "name_route"])
 # output result without index pandas
 print(df.to_string(index=False))
+
+
+
