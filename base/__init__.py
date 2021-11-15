@@ -6,10 +6,10 @@ now = datetime.datetime.now() # get date and time
 now_day = str(now.day)
 now_month = str(now.month)
 times = now.time().replace(microsecond=0) # del millisecond
-
+id = '1331'
 
 # past now day and month
-url = "https://autovokzal.org/upload/php/result.php?id=1331&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
+url = "https://autovokzal.org/upload/php/result.php?id=" + id + "&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
 
 
 # catch errors
@@ -18,7 +18,7 @@ try:
     response.raise_for_status()
     dic = response.json()
 except Exception:
-    print(">>>>--------> Errors with getting json <--------<<<<")
+    print("               >>>>--------> Errors with getting json <--------<<<<")
 
 
 #write json file
