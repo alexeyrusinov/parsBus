@@ -12,14 +12,17 @@ id = '1331'
 url = "https://autovokzal.org/upload/php/result.php?id=" + id + "&date=%272021-" + now_month + "-" + now_day + "%27&station=ekb"
 
 
-# catch errors
-try:
-    response = requests.get(url)  # get json
-    response.raise_for_status()
-    dic = response.json()
-except Exception:
-    print("               >>>>--------> Errors with getting json <--------<<<<")
+def get_json(url):
+    global dic
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        dic = response.json()
+    except Exception:
+        print(">>>>--------> Errors with getting json <--------<<<<")
+    return  dic
 
+get_json(url)
 
 #write json file
 with open('data.json', 'w', encoding='utf8') as f:
