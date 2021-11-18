@@ -32,7 +32,7 @@ with open('data.json', 'w', encoding='utf8') as f:
 with open('data.json') as f:
     data = json.load(f)
 
-
+#Rename json
 items_to_keep = []
 for item in data["rasp"]:
     item["time_otpr"] = datetime.datetime.strptime(item["time_otpr"], "%H:%M").time() # convert str to class 'datetime
