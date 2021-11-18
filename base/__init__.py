@@ -62,8 +62,6 @@ for i in items_to_keep: # print min to the next bus
         break
 
 
-
-
 for i in items_to_keep: # convert class 'datetime.time to string deleting seconds
     i["time_otpr"] = i["time_otpr"].strftime("%H:%M")
 
