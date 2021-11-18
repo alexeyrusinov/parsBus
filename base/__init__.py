@@ -21,8 +21,8 @@ def get_json(url):
     except Exception:
         print(">>>>--------> Errors with getting json <--------<<<<")
     return  dic
-
 get_json(url)
+
 
 #write json file
 with open('data.json', 'w', encoding='utf8') as f:
@@ -49,11 +49,19 @@ with open('new_data.json', 'w', encoding='utf8') as f:
 
 
 for i in items_to_keep: # print min to the next bus
-    if i["status"] == "":
+    if i["status"] == "" and i["name_bus"] == "НЕФАЗ" or i["name_bus"] == "ПАЗ-4234":
+        nex_bus = i["time_otpr"].minute - times.minute
+        free_place = i["free_place"]
+        name_bus = i["name_bus"]
+        print(f" The next bus in {nex_bus} minutes, bus: {name_bus}, free places: {free_place} ")
+        break
+    elif i["status"] == "":
         nex_bus = i["time_otpr"].minute - times.minute
         free_place = i["free_place"]
         print(f" The next bus in {nex_bus} minutes, free places: {free_place} ")
         break
+
+
 
 
 for i in items_to_keep: # convert class 'datetime.time to string deleting seconds
